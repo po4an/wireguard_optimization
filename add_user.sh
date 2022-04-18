@@ -1,19 +1,26 @@
 #!/bin/bash
-user_name=$1
-data_path='./data.txt'
-conf_path='./wireguard/wg0.conf'
-keys_path='./wireguard/'
-num=`awk 'BEGIN{a=0}{if ($2>a) a = $2} END{print a+1}' $data_path`
-priv_key_path=$keys_path$user_name'_privatekey'
-pub_key_path=$keys_path$user_name'_publickey'
-echo $priv_key_path
-echo $pub_key_path
-echo $user_name'_privatekey' >  $priv_key_path ; echo $user_name'_publickey' > $pub_key_path 
+#change path to /etc/wireguard
+wireguard_path='/home/'$USER'/wireguard/'
+addresses_data_path=$wireguard_path'addresses_data.txt'
+main_conf_path=$wireguard_path'wg0.conf'
 
-echo $user_name' '$num' '`cat $priv_key_path`' '`cat $pub_key_path` >> data.txt
 
-new_peer_text="\n[Peer]
+read -p "Please set the name of the new user: " new_user_name
+
+
+new_user_seq_num=`awk 'BEGIN{a=0}{if ($2>a) a = $2} END{print a+1}' $addresses_data_path`
+priv_key_path=$wireguard_path$new_user_name'_privatekey'
+pub_key_path=$wireguard_path$new_user_name'_publickey'
+
+echo $new_user_name'_privatekey' >  $priv_key_path ; echo $new_user_name'_publickey' > $pub_key_path
+
+echo $new_user_name' '$new_user_seq_num' '`cat $priv_key_path`' '`cat $pub_key_path` >> $addresses_data_path
+
+new_user_peer_text="\n[Peer]
 \nPublicKey = `cat $pub_key_path`
-\nAllowedIPs = 10.0.0.$num/32"
+\nAllowedIPs = 10.0.0.$new_user_seq_num/32"
 
-echo $new_peer_text >> $conf_path
+sudo systemctl restart wg-quick@wg0
+sudo systemctl status wg-quick@wg0
+
+echo $new_user_peer_text >> $main_conf_path
