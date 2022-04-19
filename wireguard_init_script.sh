@@ -1,6 +1,5 @@
 #!/bin/bash
 #change path to /etc/wireguard
-apt install -y wireguard
 wireguard_path='/home/'$USER'/wireguard/'
 port=51830
 user_name='main_interface'
