@@ -46,14 +46,19 @@ if [ -z $wireguard_path ]; then
 	touch $addresses_data_path
 	echo $tech_user_name' '$tech_user_seq_num' '`cat $priv_key_path`' '`cat $pub_key_path` >> $addresses_data_path
 	chmod 600 $addresses_data_path
-	# reminder: add loop logic
-	new_user_adding_answer="null"
-	while [ new_user_adding_answer not in ]
-	read -p "Do you wand to add the first wireguard user right now?" new_user_adding_answer
 
-	echo "Let's not add the first user"
-	sh add_user.sh
-	# reminder: add the add_user.sh script executing
+	# Let's ask the user if he wants to add a new user right now
+	new_user_adding_answer="null"
+	while [ `echo $new_user_adding_answer | grep -E -ie '^(yes|no)$' | wc -w` != 1 ]; do
+		read -p "Do you wand to add the first wireguard user right now (yes/no)?" new_user_adding_answer
+	done
+
+	if [ echo $new_user_adding_answer | tr '[:upper:]' '[:lower:]' == 'yes' ]; then
+		echo "Ok, running the wireguard_add_user.sh script"
+		sh wireguard_add_user.sh
+	else
+		echo "Ok, you can add a user whenever you want by running the wireguard_add_user.sh script"
+	fi
 else
 	echo "Wireguard is not installed
 		Try to install it using the command: sudo apt install -y wireguard
