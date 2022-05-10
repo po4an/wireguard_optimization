@@ -10,9 +10,9 @@ all_users_with_delimiter=`echo $all_users | xargs -o | tr -s ' ' '|'`
 
 # Let's read the name of the new user and check if there is already one
 new_user_name=""
-while [ -n $new_user_name && `echo $new_user_name | grep -E -ie '^('+$all_users_with_delimiter+')$' | wc -w` == 0 ]; do
-	echo "List of active users: $all_users
-	The username must be unique"
+while [ -z "$new_user_name" ] || [ `echo $new_user_name | grep -E -ie '^('+$all_users_with_delimiter+')$' | wc -w` != 0 ]; do
+	echo -e "List of active users: $all_users
+	\nThe username must be unique"
 	read -p "Please set the name of the new user: " new_user_name
 done
 
@@ -37,7 +37,7 @@ echo $new_user_peer_text >> $main_conf_path
 
 # Restart wireguard and check its status
 systemctl restart wg-quick@wg0
-if [ `systemctl status wg-quick@wg0.service | awk '$1=="Active:" {print tolower($2)}'` == "active" ]; then
+if [ `systemctl status wg-quick@wg0.service | awk '$1=="Active:" {print tolower($2)}'` = "active" ]; then
 	echo "The Wireguard service has active status"
 else
 	echo "The Wireguard service has inactive status"
@@ -51,9 +51,9 @@ while [ `echo $conf_file_adding_answer | grep -E -ie '^(yes|no)$' | wc -w` != 1 
 	read -p "Do you want to add a configuration file for a new user right now (yes/no)?" conf_file_adding_answer
 done
 
-if [ echo $conf_file_adding_answer | tr '[:upper:]' '[:lower:]' == 'yes' ]; then
-	echo "Ok, running the generate_user_conf.sh script"
+if [ `echo $conf_file_adding_answer | tr '[:upper:]' '[:lower:]'` = 'yes' ]; then
+	echo -e "Ok, running the generate_user_conf.sh script"
 	sh generate_user_conf.sh $new_user_name
 else
-	echo "Ok, you can add a configuration file whenever you want by running the generate_user_conf.sh script"
+	echo -e "Ok, you can add a configuration file whenever you want by running the generate_user_conf.sh script"
 fi

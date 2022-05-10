@@ -5,13 +5,15 @@ addresses_data_path=$wireguard_path'/addresses_data.txt'
 config_path="/home/$USER/wireguard_configs"
 all_users=`cat $addresses_data_path | awk -v tech_user_name="$tech_user_name" '$1!=tech_user_name {print$1}'`
 all_users_with_delimiter=`echo $all_users | xargs -o | tr -s ' ' '|'`
+main_server_ip=`wget -qO- eth0.me`
+main_server_port=51830
 
 # Write the first argument to the user_name variable. If the argument is not given, specify for which user the configuration file should be made.
 # Validating whether there is such a user in the metadata
 user_name=$1
-if [ -z $user_name ]; then
+if [ -z "$user_name" ]; then
 	while [ `echo $user_name | grep -E -ie '^('+$all_users_with_delimiter+')$' | wc -w` != 1 ]; do
-		echo "List of active users: $all_users"
+		echo -e "List of active users: $all_users"
 		read -p "Enter the user name you want to generate the configuration file: " user_name
 	done
 fi
@@ -28,7 +30,7 @@ new_user_config_text="\n[Interface]
 \n
 \n[Peer]
 \nPublicKey = $main_pub_key
-\nEndpoint = 3.71.205.243:51830
+\nEndpoint = $main_server_ip:$main_server_port
 \nAllowedIPs = 0.0.0.0/0
 \nPersistentKeepalive = 20"
 
@@ -40,5 +42,5 @@ conf_file_path=$config_path"/"$user_name".conf"
 echo $new_user_config_text > $conf_file_path
 chmod 600 $conf_file_path
 
-echo "Successful! The configuration file was created and is located at the path: $conf_file_path
-Use it on the device where you want to use VPN"
+echo -e "Successful! The configuration file was created and is located at the path: $conf_file_path
+\nUse it on the device where you want to use VPN"
