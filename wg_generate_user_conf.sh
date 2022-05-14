@@ -48,5 +48,5 @@ if [ "$USER" = "root" ]; then
 else
 	echo "\nThe script has to be run as root user
 		\nAdd 'sudo' to the beginning of the script:
-		\nsudo sh generate_user_conf.sh"
+		\nsudo sh wg_generate_user_conf.sh"
 fi

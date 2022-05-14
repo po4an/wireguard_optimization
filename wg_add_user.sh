@@ -53,13 +53,13 @@ if [ "$USER" = "root" ]; then
 	done
 
 	if [ `echo $conf_file_adding_answer | tr '[:upper:]' '[:lower:]'` = 'yes' ]; then
-		echo "\nOk, running the generate_user_conf.sh script"
-		sh generate_user_conf.sh $new_user_name
+		echo "\nOk, running the wg_generate_user_conf.sh script"
+		sh wg_generate_user_conf.sh $new_user_name
 	else
-		echo "\nOk, you can add a configuration file whenever you want by running the generate_user_conf.sh script"
+		echo "\nOk, you can add a configuration file whenever you want by running the wg_generate_user_conf.sh script"
 	fi
 else
 	echo "\nThe script has to be run as root user
 		\nAdd 'sudo' to the beginning of the script:
-		\nsudo sh wireguard_add_user.sh"
+		\nsudo sh wg_add_user.sh"
 fi

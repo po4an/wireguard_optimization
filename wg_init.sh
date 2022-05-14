@@ -58,10 +58,10 @@ if [ "$USER" = "root" ]; then
 			done
 
 			if [ `echo $new_user_adding_answer | tr '[:upper:]' '[:lower:]'` = 'yes' ]; then
-				echo "\nOk, running the wireguard_add_user.sh script"
-				sh wireguard_add_user.sh
+				echo "\nOk, running the wg_add_user.sh script"
+				sh wg_add_user.sh
 			else
-				echo "\nOk, you can add a user whenever you want by running the wireguard_add_user.sh script"
+				echo "\nOk, you can add a user whenever you want by running the wg_add_user.sh script"
 			fi
 		fi
 	else
@@ -73,5 +73,5 @@ if [ "$USER" = "root" ]; then
 else
 	echo "\nThe script has to be run as root user
 		\nAdd 'sudo' to the beginning of the script:
-		\nsudo sh wireguard_init_script.sh"
+		\nsudo sh wg_init.sh"
 fi
