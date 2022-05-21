@@ -35,7 +35,8 @@ The project was inspired by the [video](https://www.youtube.com/watch?v=5Aql0V-t
 ```bash
 # Upgrade packages, install wireguard
 sudo apt update && sudo apt upgrade -y && sudo apt install -y wireguard
-
+```
+```bash
 # Run the script wg_init.sh
 sudo sh wg_init.sh
 ```
@@ -59,7 +60,8 @@ Then read this file and use it on the device
 ```bash
 # Run the script, click yes
 sudo sh wg_add_user.sh
-
+```
+```bash
 # And read the file
 cat /home/root/wireguard_configs/<The user name we entered earlier>.conf
 ```
